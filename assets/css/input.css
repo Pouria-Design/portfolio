@@ -1,0 +1,392 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Design Tokens — «Ember» Design System
+   الهام از: Linear / Vercel / Raycast — خاکستری‌های گرم، بدون بنفش و سبز
+--------------------------------------------------------------------------- */
+@theme {
+  --font-sans: "Vazirmatn", "Tahoma", ui-sans-serif, system-ui, sans-serif;
+
+  /* Ember accent scale (amber/orange warm) */
+  --color-ember-50: #fff8eb;
+  --color-ember-100: #feefc7;
+  --color-ember-200: #fdd98a;
+  --color-ember-300: #fcc14d;
+  --color-ember-400: #fbab24;
+  --color-ember-500: #f5870b;
+  --color-ember-600: #d96306;
+  --color-ember-700: #b44409;
+  --color-ember-800: #92350e;
+  --color-ember-900: #782c0f;
+
+  /* Warm neutral surface scale (tinted, never pure gray) */
+  --color-coal-50: #faf9f7;
+  --color-coal-100: #f3f1ee;
+  --color-coal-200: #e5e1dc;
+  --color-coal-300: #d0c9c2;
+  --color-coal-400: #a39a90;
+  --color-coal-500: #7d746b;
+  --color-coal-600: #5c554e;
+  --color-coal-700: #443f3a;
+  --color-coal-800: #2a2724;
+  --color-coal-850: #1d1a18;
+  --color-coal-900: #161413;
+  --color-coal-950: #0e0c0b;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-quint: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+  --animate-pulse-dot: pulse-dot 2.4s var(--ease-spring) infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.8s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgb(245 135 11 / 0.45); }
+    50%      { box-shadow: 0 0 0 7px rgb(245 135 11 / 0); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+  @keyframes shimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("../fonts/Vazirmatn-VF.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-coal-50 text-coal-800 antialiased;
+    @apply dark:bg-coal-950 dark:text-coal-200;
+    font-feature-settings: "ss01";
+    text-rendering: optimizeLegibility;
+    transition: background-color 400ms var(--ease-spring), color 400ms var(--ease-spring);
+  }
+
+  ::selection {
+    @apply bg-ember-500/90 text-coal-950;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ember-500);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* عددها همیشه لاتین و مرتب */
+  .nums, time, [data-count] {
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    unicode-bidi: embed;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Components
+--------------------------------------------------------------------------- */
+@layer components {
+  /* کارت بنتو — سطح شیشه‌ای با هایلایت داخلی */
+  .bento {
+    @apply relative overflow-hidden rounded-3xl border;
+    @apply border-coal-200/80 bg-white/70 shadow-[0_1px_0_0_rgb(255_255_255/0.6)_inset,0_8px_30px_-12px_rgb(0_0_0/0.12)];
+    @apply dark:border-white/[0.07] dark:bg-coal-900/60 dark:shadow-[0_1px_0_0_rgb(255_255_255/0.05)_inset,0_20px_50px_-20px_rgb(0_0_0/0.6)];
+    backdrop-filter: blur(12px);
+    transition:
+      transform 500ms var(--ease-out-expo),
+      border-color 400ms var(--ease-spring),
+      box-shadow 500ms var(--ease-out-expo),
+      background-color 400ms var(--ease-spring);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .bento:hover {
+      transform: translateY(-4px);
+      @apply border-coal-300 dark:border-white/[0.14];
+    }
+  }
+
+  /* اسپات‌لایت دنبال‌کننده‌ی موس */
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 500ms var(--ease-spring);
+    background: radial-gradient(
+      480px circle at var(--mx, 50%) var(--my, 50%),
+      rgb(245 135 11 / 0.10),
+      transparent 65%
+    );
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .spotlight:hover::before { opacity: 1; }
+  }
+
+  /* خط براق بالای کارت */
+  .edge-glow::after {
+    content: "";
+    position: absolute;
+    inset-inline: 12%;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(to left, transparent, rgb(251 171 36 / 0.55), transparent);
+    opacity: 0;
+    transition: opacity 500ms var(--ease-spring);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .edge-glow:hover::after { opacity: 1; }
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    @apply btn bg-ember-500 text-coal-950 shadow-[0_8px_24px_-8px_rgb(245_135_11/0.6)];
+  }
+  @media (hover: hover) {
+    .btn-primary:hover { @apply bg-ember-400 shadow-[0_10px_32px_-8px_rgb(245_135_11/0.75)]; }
+  }
+
+  .btn-ghost {
+    @apply btn border border-coal-300/80 text-coal-700;
+    @apply dark:border-white/10 dark:text-coal-200;
+  }
+  @media (hover: hover) {
+    .btn-ghost:hover { @apply border-coal-400 bg-coal-100 dark:border-white/20 dark:bg-white/5; }
+  }
+
+  /* چیپ مهارت */
+  .chip {
+    @apply inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium;
+    @apply border-coal-200 bg-white/80 text-coal-700;
+    @apply dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-coal-200;
+    transition: transform 300ms var(--ease-out-expo), border-color 300ms var(--ease-spring);
+  }
+
+  /* لینک با آندرلاین کشیده */
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1.5px;
+    background-repeat: no-repeat;
+    background-position: right 100%;
+    transition: background-size 350ms var(--ease-out-expo);
+    padding-bottom: 2px;
+  }
+  @media (hover: hover) {
+    .link-underline:hover { background-size: 100% 1.5px; }
+  }
+
+  /* --- منوی موبایل --- */
+  .mobile-menu {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows 400ms var(--ease-spring),
+      opacity 300ms var(--ease-spring);
+  }
+  .mobile-menu > nav { overflow: hidden; }
+  .mobile-menu.open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    @apply border-b border-coal-200/60 bg-coal-50/95 backdrop-blur-xl;
+    @apply dark:border-white/[0.06] dark:bg-coal-950/95;
+  }
+
+  .mobile-link {
+    @apply rounded-2xl px-4 py-3 text-base font-semibold text-coal-600;
+    @apply dark:text-coal-300;
+    transition: background-color 200ms var(--ease-spring), color 200ms var(--ease-spring), transform 200ms var(--ease-out-expo);
+  }
+  .mobile-link:active { transform: scale(0.98); }
+  @media (hover: hover) {
+    .mobile-link:hover { @apply bg-coal-100 text-coal-900 dark:bg-white/5 dark:text-white; }
+  }
+
+  /* --- آکاردئون سوالات متداول --- */
+  .faq-item {
+    @apply rounded-2xl;
+    transition: background-color 300ms var(--ease-spring);
+  }
+  .faq-item[data-open="true"] { @apply bg-coal-100/70 dark:bg-white/[0.03]; }
+
+  .faq-trigger {
+    @apply flex w-full cursor-pointer items-center justify-between gap-4 rounded-2xl px-5 py-4 text-start text-sm font-bold text-coal-800 sm:text-base;
+    @apply dark:text-coal-100;
+    transition: color 200ms var(--ease-spring);
+  }
+  .faq-icon {
+    @apply size-5 shrink-0 text-coal-400 dark:text-coal-500;
+    transition: transform 350ms var(--ease-spring), color 200ms var(--ease-spring);
+  }
+  .faq-item[data-open="true"] .faq-icon {
+    transform: rotate(135deg);
+    @apply text-ember-500;
+  }
+
+  .faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 400ms var(--ease-spring);
+  }
+  .faq-item[data-open="true"] .faq-panel { grid-template-rows: 1fr; }
+  .faq-content {
+    overflow: hidden;
+    @apply px-5 text-sm leading-8 text-coal-500 dark:text-coal-400;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 350ms var(--ease-out-expo), transform 350ms var(--ease-out-expo), padding 350ms var(--ease-spring);
+  }
+  .faq-item[data-open="true"] .faq-content {
+    opacity: 1;
+    transform: translateY(0);
+    padding-bottom: 1.25rem;
+  }
+
+  /* --- ناوبری فعال --- */
+  [data-nav].is-active {
+    @apply text-coal-900 dark:text-white;
+    background-size: 100% 1.5px;
+  }
+
+  /* تیتر بزرگ با گرادیان گرم */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(120deg, var(--color-coal-900) 20%, var(--color-ember-600) 90%);
+  }
+  .dark .text-gradient {
+    background-image: linear-gradient(120deg, var(--color-coal-50) 30%, var(--color-ember-300) 90%);
+  }
+}
+
+/* دکمه‌ی پایه — به‌صورت utility تا در @apply قابل استفاده باشد */
+@utility btn {
+  display: inline-flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition:
+    transform 160ms var(--ease-out-expo),
+    background-color 200ms var(--ease-spring),
+    color 200ms var(--ease-spring),
+    border-color 200ms var(--ease-spring),
+    box-shadow 300ms var(--ease-out-expo);
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities
+--------------------------------------------------------------------------- */
+@layer utilities {
+  /* نویز فیلم — بافت ظریف روی کل صفحه */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* هاله‌ی محیطی پس‌زمینه — رنگ پایه حتماً باید باشد تا گرادیان شفاف روی سفید مرورگر نیفتد */
+  .ambient {
+    background-color: var(--color-coal-50);
+    background-image:
+      radial-gradient(52rem 32rem at 85% -10%, rgb(245 135 11 / 0.10), transparent 60%),
+      radial-gradient(40rem 28rem at 8% 12%, rgb(217 99 6 / 0.07), transparent 60%);
+  }
+  .dark .ambient {
+    background-color: var(--color-coal-950);
+    background-image:
+      radial-gradient(52rem 32rem at 85% -10%, rgb(245 135 11 / 0.13), transparent 60%),
+      radial-gradient(40rem 28rem at 8% 12%, rgb(180 68 9 / 0.10), transparent 60%);
+  }
+
+  /* ریویل اسکرول — فقط transform/opacity */
+  [data-reveal]:not(.reveal) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition:
+      opacity 700ms var(--ease-out-expo),
+      transform 700ms var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ماسک محو شدن لبه‌های مارکی */
+  .marquee-mask {
+    mask-image: linear-gradient(to left, transparent, black 12%, black 88%, transparent);
+  }
+
+  /* اسکرول‌بار سفارشی */
+  .nice-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+  .nice-scroll::-webkit-scrollbar-thumb {
+    background: var(--color-coal-300);
+    border-radius: 99px;
+  }
+  .dark .nice-scroll::-webkit-scrollbar-thumb { background: var(--color-coal-700); }
+
+  .text-balance { text-wrap: balance; }
+
+  .img-fallback {
+    background:
+      radial-gradient(circle at 30% 20%, rgb(245 135 11 / 0.18), transparent 55%),
+      linear-gradient(135deg, var(--color-coal-800), var(--color-coal-900));
+    object-fit: cover;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion — حرکت کمتر، نه صفر
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal {
+    transform: none;
+    transition: opacity 300ms ease;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

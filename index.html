@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    // مسیر پایه برای لود درست assetها در هر محیط (فایل محلی، سرور، زیرپوشه)
+    (function () {
+      var page = location.href.split("#")[0].split("?")[0];
+      var base = /\/$/.test(page) ? page : page.replace(/[^/]+$/, "");
+      document.write('<base href="' + base + '">');
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حسن خسروجردی — طراح و توسعه‌دهنده رابط کاربری</title>
+  <meta name="description" content="پورتفولیوی حسن خسروجردی — طراح UI/UX و فرانت‌اند. اینجا چند تا از کارهایی که انجام دادم و راه‌هایی که می‌تونیم با هم کار کنیم." />
+  <meta name="author" content="حسن خسروجردی" />
+  <meta name="theme-color" content="#0e0c0b" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fa_IR" />
+  <meta property="og:title" content="حسن خسروجردی — طراح و توسعه‌دهنده رابط کاربری" />
+  <meta property="og:description" content="طراحی و کد می‌زنم. سایت‌هایی که هم درست کار کنن، هم استفاده ازشون راحت باشه." />
+  <meta property="og:image" content="assets/img/avatar.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="حسن خسروجردی — طراح و توسعه‌دهنده رابط کاربری" />
+  <meta name="twitter:description" content="طراحی و کد می‌زنم. سایت‌هایی که هم درست کار کنن، هم استفاده ازشون راحت باشه." />
+
+  <!-- داده‌های ساختاریافته -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "حسن خسروجردی",
+    "jobTitle": "طراح رابط و تجربه کاربری و توسعه‌دهنده فرانت‌اند",
+    "address": { "@type": "PostalAddress", "addressLocality": "تهران", "addressCountry": "IR" },
+    "email": "hi@hassan.dev",
+    "knowsAbout": ["UI Design", "UX Design", "Design Systems", "Front-End Development", "Motion Design"]
+  }
+  </script>
+
+  <link rel="icon" type="image/png" href="assets/img/avatar.png" />
+  <link rel="preload" href="assets/fonts/Vazirmatn-VF.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/projects.css" />
+  <script>
+    // جلوگیری از فلش تم — قبل از رندر اجرا می‌شود
+    (function () {
+      var saved = localStorage.getItem("theme");
+      if (saved === "light") document.documentElement.classList.remove("dark");
+    })();
+  </script>
+</head>
+
+<body class="grain ambient min-h-screen font-sans selection:bg-ember-500">
+
+  <!-- نوار پیشرفت اسکرول -->
+  <div id="scroll-progress" class="fixed inset-x-0 top-0 z-[70] h-0.5 origin-right scale-x-0 bg-gradient-to-l from-ember-500 to-ember-300" aria-hidden="true"></div>
+
+  <!-- ======================= هدر ======================= -->
+  <header id="site-header" class="fixed inset-x-0 top-0 z-50 transition-all duration-500">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
+      <a href="#top" class="group flex items-center gap-3">
+        <span class="grid size-10 place-items-center rounded-2xl bg-ember-500 font-extrabold text-coal-950 shadow-[0_6px_20px_-6px_rgb(245_135_11/0.7)] transition-transform duration-300 group-hover:rotate-6">ح</span>
+        <span class="hidden text-sm font-bold tracking-tight sm:block">حسن خسروجردی</span>
+      </a>
+
+      <nav class="hidden items-center gap-7 text-sm font-medium text-coal-500 md:flex dark:text-coal-400" aria-label="ناوبری اصلی">
+        <a data-nav="projects" class="link-underline transition-colors hover:text-coal-900 dark:hover:text-white" href="#projects">پروژه‌ها</a>
+        <a data-nav="services" class="link-underline transition-colors hover:text-coal-900 dark:hover:text-white" href="#services">خدمات</a>
+        <a data-nav="experience" class="link-underline transition-colors hover:text-coal-900 dark:hover:text-white" href="#experience">تجربه‌ها</a>
+        <a data-nav="about" class="link-underline transition-colors hover:text-coal-900 dark:hover:text-white" href="#about">درباره من</a>
+        <a data-nav="faq" class="link-underline transition-colors hover:text-coal-900 dark:hover:text-white" href="#faq">سوالات</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button id="theme-toggle" type="button" aria-label="تغییر تم روشن و تاریک"
+          class="grid size-10 cursor-pointer place-items-center rounded-full border border-coal-200 bg-white/70 text-coal-600 backdrop-blur transition-transform duration-200 active:scale-95 dark:border-white/10 dark:bg-white/5 dark:text-coal-300">
+          <svg id="icon-sun" class="hidden size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg id="icon-moon" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        </button>
+        <a href="#contact" class="btn-primary magnetic hidden sm:inline-flex">شروع همکاری</a>
+
+        <!-- دکمه منوی موبایل -->
+        <button id="menu-toggle" type="button" aria-label="باز کردن منو" aria-expanded="false" aria-controls="mobile-menu"
+          class="grid size-10 cursor-pointer place-items-center rounded-full border border-coal-200 bg-white/70 text-coal-600 backdrop-blur transition-transform duration-200 active:scale-95 md:hidden dark:border-white/10 dark:bg-white/5 dark:text-coal-300">
+          <svg id="icon-menu" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg id="icon-close" class="hidden size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- منوی موبایل -->
+    <div id="mobile-menu" class="mobile-menu md:hidden">
+      <nav class="flex flex-col gap-1 px-5 pb-6 pt-2" aria-label="ناوبری موبایل">
+        <a class="mobile-link" href="#projects">پروژه‌ها</a>
+        <a class="mobile-link" href="#services">خدمات</a>
+        <a class="mobile-link" href="#experience">تجربه‌ها</a>
+        <a class="mobile-link" href="#about">درباره من</a>
+        <a class="mobile-link" href="#faq">سوالات متداول</a>
+        <a class="mobile-link" href="#contact">تماس</a>
+        <a href="#contact" class="btn-primary mt-3 w-full">شروع همکاری</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="mx-auto max-w-6xl px-5 pt-32 sm:px-8">
+
+    <!-- ======================= هیرو بنتو ======================= -->
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="معرفی">
+
+      <!-- کارت پروفایل -->
+      <article data-reveal class="bento spotlight edge-glow sm:col-span-2 lg:row-span-2">
+        <div class="flex h-full flex-col justify-between gap-8 p-7 sm:p-9">
+          <div class="flex items-start justify-between">
+            <img src="assets/img/avatar.png" alt="تصویر حسن خسروجردی" width="320" height="320" decoding="async" fetchpriority="high"
+              class="size-20 rounded-3xl object-cover shadow-lg ring-1 ring-black/5 sm:size-24 dark:ring-white/10" />
+            <span class="inline-flex items-center gap-2 rounded-full border border-ember-500/25 bg-ember-500/10 px-3.5 py-1.5 text-xs font-semibold text-ember-600 dark:text-ember-300">
+              <span class="size-2 rounded-full bg-ember-500 animate-pulse-dot"></span>
+              آماده‌ی همکاری
+            </span>
+          </div>
+
+          <div>
+            <p class="mb-2 text-sm font-medium text-coal-500 dark:text-coal-300">سلام، من</p>
+            <h1 class="text-gradient text-balance text-4xl font-extrabold leading-[1.15] tracking-tight sm:text-5xl">
+              حسن خسروجردی
+            </h1>
+            <p class="mt-4 max-w-md text-base leading-8 text-coal-500 dark:text-coal-400">
+              UI/UX طراحی می‌کنم و فرانت‌اند می‌زنم.
+              بیشتر وقت‌ها دارم روی سایت‌ها و اپ‌هایی کار می‌کنم که آدم‌ها واقعاً باهاشون سر و کله بزنن —
+              نه فقط <span class="font-semibold text-coal-800 dark:text-white">زیبا</span> باشن، بلکه ساده و قابل‌فهم هم باشن.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <a href="#projects" class="btn-primary magnetic">
+              مشاهده پروژه‌ها
+              <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14m0 0 6-6m-6 6-6-6"/></svg>
+            </a>
+            <a href="#contact" class="btn-ghost magnetic">تماس با من</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- مارکی مهارت‌ها -->
+      <article data-reveal class="bento sm:col-span-2" aria-label="ابزارها و مهارت‌ها">
+        <div class="flex h-full flex-col justify-center gap-4 overflow-hidden py-6">
+          <p class="px-7 text-xs font-semibold uppercase tracking-widest text-coal-500 dark:text-coal-300">هر روز باهاشون سر و کله می‌زنم</p>
+          <div dir="ltr" class="marquee-mask overflow-hidden">
+            <div class="flex w-max animate-marquee gap-3 pl-3">
+              <!-- نسخه اول -->
+              <span class="chip">Figma</span><span class="chip">Tailwind CSS</span><span class="chip">JavaScript</span><span class="chip">TypeScript</span><span class="chip">React</span><span class="chip">Next.js</span><span class="chip">GSAP</span><span class="chip">Design System</span><span class="chip">Framer Motion</span><span class="chip">Accessibility</span>
+              <!-- نسخه دوم برای لوپ بی‌نهایت -->
+              <span class="chip" aria-hidden="true">Figma</span><span class="chip" aria-hidden="true">Tailwind CSS</span><span class="chip" aria-hidden="true">JavaScript</span><span class="chip" aria-hidden="true">TypeScript</span><span class="chip" aria-hidden="true">React</span><span class="chip" aria-hidden="true">Next.js</span><span class="chip" aria-hidden="true">GSAP</span><span class="chip" aria-hidden="true">Design System</span><span class="chip" aria-hidden="true">Framer Motion</span><span class="chip" aria-hidden="true">Accessibility</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- آمار: سال تجربه -->
+      <article data-reveal class="bento spotlight">
+        <div class="flex h-full flex-col justify-between p-6">
+          <svg class="size-6 text-ember-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <div>
+            <p class="text-5xl font-extrabold tracking-tight text-coal-900 dark:text-white"><span data-count="7">۰</span><span class="text-ember-500">+</span></p>
+            <p class="mt-1 text-sm text-coal-500 dark:text-coal-400">سال تو طراحی و کد</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- آمار: پروژه -->
+      <article data-reveal class="bento spotlight">
+        <div class="flex h-full flex-col justify-between p-6">
+          <svg class="size-6 text-ember-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+          <div>
+            <p class="text-5xl font-extrabold tracking-tight text-coal-900 dark:text-white"><span data-count="48">۰</span><span class="text-ember-500">+</span></p>
+            <p class="mt-1 text-sm text-coal-500 dark:text-coal-400">پروژه تحویل دادم</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- ساعت تهران -->
+      <article data-reveal class="bento spotlight">
+        <div class="flex h-full flex-col justify-between p-6">
+          <div class="flex items-center gap-2 text-coal-400 dark:text-coal-500">
+            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span class="text-sm font-medium">تهران، ایران</span>
+          </div>
+          <div>
+            <time id="tehran-clock" class="block text-4xl font-extrabold tracking-tight text-coal-900 dark:text-white">--:--</time>
+            <p class="mt-1 text-sm text-coal-500 dark:text-coal-400">الان اینجا چند ساعته</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- شبکه‌های اجتماعی -->
+      <article data-reveal class="bento">
+        <div class="flex h-full flex-col justify-between gap-4 p-6">
+          <p class="text-sm font-medium text-coal-500 dark:text-coal-300">جاهایی که پیدام می‌کنید</p>
+          <div class="grid grid-cols-4 gap-2">
+            <a href="https://github.com" target="_blank" rel="noopener" aria-label="گیت‌هاب" class="group grid aspect-square cursor-pointer place-items-center rounded-2xl border border-coal-200 text-coal-500 transition-all duration-300 hover:-translate-y-1 hover:border-ember-500/40 hover:text-ember-500 dark:border-white/10 dark:text-coal-400">
+              <svg class="size-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17.2 4.9 18.2 5.2 18.2 5.2c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="لینکدین" class="group grid aspect-square cursor-pointer place-items-center rounded-2xl border border-coal-200 text-coal-500 transition-all duration-300 hover:-translate-y-1 hover:border-ember-500/40 hover:text-ember-500 dark:border-white/10 dark:text-coal-400">
+              <svg class="size-5" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.5c0-1.3 0-3-1.9-3s-2.2 1.4-2.2 2.9V21H9z"/></svg>
+            </a>
+            <a href="https://dribbble.com" target="_blank" rel="noopener" aria-label="دریبل" class="group grid aspect-square cursor-pointer place-items-center rounded-2xl border border-coal-200 text-coal-500 transition-all duration-300 hover:-translate-y-1 hover:border-ember-500/40 hover:text-ember-500 dark:border-white/10 dark:text-coal-400">
+              <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9.5"/><path d="M5 6.5c4 4.5 9 6.5 15.5 5.5M8 3.2c4.5 5 7 10.5 8 17.3M2.7 12.8c5.5-1.5 11-1 15.8 2.7"/></svg>
+            </a>
+            <a href="https://x.com" target="_blank" rel="noopener" aria-label="ایکس (توییتر)" class="group grid aspect-square cursor-pointer place-items-center rounded-2xl border border-coal-200 text-coal-500 transition-all duration-300 hover:-translate-y-1 hover:border-ember-500/40 hover:text-ember-500 dark:border-white/10 dark:text-coal-400">
+              <svg class="size-4.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.2 2h6.4l4.4 5.9L18.9 2Zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20Z"/></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- نقل‌قول / فلسفه -->
+      <article data-reveal class="bento spotlight sm:col-span-2">
+        <div class="flex h-full items-center gap-5 p-7">
+          <svg class="size-10 shrink-0 text-ember-500/70" viewBox="0 0 24 24" fill="currentColor"><path d="M10 8c-3 1-5 3.5-5 7v1h5v-6H7.5C8 9 9 8.5 10 8.2V8Zm9 0c-3 1-5 3.5-5 7v1h5v-6h-2.5c.5-1 1.5-1.5 2.5-1.8V8Z"/></svg>
+          <p class="text-balance text-lg font-medium leading-9 text-coal-600 dark:text-coal-300">
+            معمولاً وقتی یه چیز درست طراحی شده، کسی نمی‌گه «چه UI خوبی!»
+            فقط <span class="text-ember-600 dark:text-ember-300">راحت</span> کارش رو انجام می‌ده و می‌ره.
+            همین رو دوست دارم.
+          </p>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ======================= پروژه‌ها ======================= -->
+    <section id="projects" class="mt-28 scroll-mt-28" aria-label="پروژه‌های منتخب">
+      <div data-reveal class="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="mb-2 text-sm font-bold text-ember-600 dark:text-ember-400">نمونه‌کارها</p>
+          <h2 class="text-3xl font-extrabold tracking-tight text-coal-900 sm:text-4xl dark:text-white">پروژه‌های منتخب</h2>
+          <p class="mt-3 max-w-lg text-sm leading-7 text-coal-500 dark:text-coal-400">
+            سه تا از کارهای اخیرم — هر کدوم یه چالش جدا داشت.
+          </p>
+        </div>
+        <a href="https://github.com" target="_blank" rel="noopener" class="btn-ghost magnetic text-sm">
+          همه در گیت‌هاب
+          <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+
+      <div class="project-grid">
+
+        <!-- پروژه ۱ — ویژه -->
+        <article data-reveal class="project-card project-card--featured spotlight">
+          <div class="project-mockup project-mockup--ava" aria-hidden="true">
+            <div class="project-mockup__glow"></div>
+            <div class="project-mockup__screen">
+              <div class="project-mockup__chrome">
+                <span class="project-mockup__dot"></span>
+                <span class="project-mockup__dot"></span>
+                <span class="project-mockup__dot"></span>
+              </div>
+              <div class="project-mockup__ui">
+                <div class="project-mockup__bar project-mockup__bar--accent"></div>
+                <div class="project-mockup__bar project-mockup__bar--mid"></div>
+                <div class="project-mockup__cards">
+                  <div class="project-mockup__mini project-mockup__mini--hot"></div>
+                  <div class="project-mockup__mini"></div>
+                  <div class="project-mockup__mini project-mockup__mini--hot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-meta">
+              <span class="project-index">01</span>
+              <span class="project-year">۱۴۰۳</span>
+            </div>
+            <h3 class="project-title">پلتفرم فروشگاهی «آوا»</h3>
+            <p class="project-desc">
+              فروشگاه آنلاین «آوا» رو از صفر بازطراحی کردیم. هدف ساده بود:
+              خرید سریع‌تر، اعتماد بیشتر، و کمتر گیج شدن وسط مسیر.
+              یه دیزاین سیستم هم ساختیم که تیم بعداً راحت‌تر باهاش کار کنه.
+            </p>
+            <p class="project-metric">
+              <strong>+۳۲٪</strong>
+              نرخ تبدیل بعد از لانچ بالا رفت
+            </p>
+            <div class="project-footer">
+              <div class="project-tags">
+                <span class="project-tag">Next.js</span>
+                <span class="project-tag">Design System</span>
+                <span class="project-tag">GSAP</span>
+              </div>
+              <span class="project-link">
+                مشاهده
+                <span class="project-link__icon">
+                  <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </span>
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <!-- پروژه ۲ -->
+        <article data-reveal class="project-card spotlight">
+          <div class="project-mockup project-mockup--radar" aria-hidden="true">
+            <div class="project-mockup__glow"></div>
+            <div class="project-mockup__screen">
+              <div class="project-mockup__chrome">
+                <span class="project-mockup__dot"></span>
+                <span class="project-mockup__dot"></span>
+                <span class="project-mockup__dot"></span>
+              </div>
+              <div class="project-mockup__ui">
+                <div class="project-mockup__bar project-mockup__bar--accent"></div>
+                <div class="project-mockup__bar project-mockup__bar--short"></div>
+                <div class="project-mockup__chart">
+                  <div class="project-mockup__col"></div>
+                  <div class="project-mockup__col"></div>
+                  <div class="project-mockup__col"></div>
+                  <div class="project-mockup__col"></div>
+                  <div class="project-mockup__col"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-meta">
+              <span class="project-index">02</span>
+              <span class="project-year">۱۴۰۲</span>
+            </div>
+            <h3 class="project-title">داشبورد «رصد»</h3>
+            <p class="project-desc">
+              داشبورد برای دیدن داده‌های لحظه‌ای. بیش از ۴۰ تا کامپوننت جدا
+              ساختیم تا تیم بتونه هر بخش رو جدا تنظیم کنه. دارک مود هم از اول توش بود.
+            </p>
+            <div class="project-footer">
+              <div class="project-tags">
+                <span class="project-tag">React</span>
+                <span class="project-tag">D3.js</span>
+              </div>
+              <span class="project-link">
+                مشاهده
+                <span class="project-link__icon">
+                  <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </span>
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <!-- پروژه ۳ -->
+        <article data-reveal class="project-card spotlight">
+          <div class="project-mockup project-mockup--pars" aria-hidden="true">
+            <div class="project-mockup__glow"></div>
+            <div class="project-mockup__screen project-mockup__screen--phone">
+              <div class="project-mockup__phone">
+                <div class="project-mockup__notch"></div>
+                <div class="project-mockup__balance"></div>
+                <div class="project-mockup__rows">
+                  <div class="project-mockup__row"></div>
+                  <div class="project-mockup__row"></div>
+                  <div class="project-mockup__row"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-meta">
+              <span class="project-index">03</span>
+              <span class="project-year">۱۴۰۲</span>
+            </div>
+            <h3 class="project-title">اپلیکیشن «پارس»</h3>
+            <p class="project-desc">
+              اپ مدیریت پول شخصی. تمرکز روی انیمیشن‌های روان و
+              آنبوردینگی که کاربر رو گیج نکنه — اولین بار که بازش می‌کنی، خودش راهنماییت کنه.
+            </p>
+            <div class="project-footer">
+              <div class="project-tags">
+                <span class="project-tag">Flutter</span>
+                <span class="project-tag">Motion Design</span>
+              </div>
+              <span class="project-link">
+                مشاهده
+                <span class="project-link__icon">
+                  <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </span>
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <!-- بنر CTA -->
+        <a data-reveal href="#contact" class="project-cta magnetic">
+          <div class="project-cta__text">
+            <span class="project-cta__label">پروژه بعدی شما؟</span>
+            <p class="project-cta__title">اگه ایده‌ای دارید، <span class="text-gradient">بگید ببینیم.</span></p>
+          </div>
+          <span class="project-cta__btn">
+            شروع همکاری
+            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ======================= خدمات ======================= -->
+    <section id="services" class="mt-28 scroll-mt-28" aria-label="خدمات">
+      <div data-reveal class="mb-10">
+        <p class="mb-2 text-sm font-bold text-ember-600 dark:text-ember-400">کارهایی که انجام می‌دم</p>
+        <h2 class="text-3xl font-extrabold tracking-tight text-coal-900 sm:text-4xl dark:text-white">خدمات</h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+        <article data-reveal class="bento spotlight group p-6">
+          <span class="mb-5 grid size-12 place-items-center rounded-2xl bg-ember-500/12 text-ember-600 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-y-1 group-hover:rotate-3 dark:text-ember-400">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
+          </span>
+          <h3 class="mb-2 font-bold text-coal-900 dark:text-white">طراحی رابط کاربری</h3>
+          <p class="text-sm leading-7 text-coal-500 dark:text-coal-400">طراحی صفحات و اپ — تمیز، خوانا، و هماهنگ با هویت برند شما.</p>
+        </article>
+
+        <article data-reveal class="bento spotlight group p-6">
+          <span class="mb-5 grid size-12 place-items-center rounded-2xl bg-ember-500/12 text-ember-600 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-y-1 group-hover:rotate-3 dark:text-ember-400">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.2 2.2m8.4 8.4 2.2 2.2m0-12.8-2.2 2.2M7.8 16.2l-2.2 2.2"/><circle cx="12" cy="12" r="3.5"/></svg>
+          </span>
+          <h3 class="mb-2 font-bold text-coal-900 dark:text-white">تجربه کاربری</h3>
+          <p class="text-sm leading-7 text-coal-500 dark:text-coal-400">قبل از طراحی، اول می‌فهمیم کاربر چی می‌خواد. وایرفریم، تست، و اصلاح تا جایی که درست بشه.</p>
+        </article>
+
+        <article data-reveal class="bento spotlight group p-6">
+          <span class="mb-5 grid size-12 place-items-center rounded-2xl bg-ember-500/12 text-ember-600 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-y-1 group-hover:rotate-3 dark:text-ember-400">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6M13 4l-2 16"/></svg>
+          </span>
+          <h3 class="mb-2 font-bold text-coal-900 dark:text-white">توسعه فرانت‌اند</h3>
+          <p class="text-sm leading-7 text-coal-500 dark:text-coal-400">طراحی رو خودم کد می‌زنم — سریع، سبک، و روی موبایل هم درست کار کنه.</p>
+        </article>
+
+        <article data-reveal class="bento spotlight group p-6">
+          <span class="mb-5 grid size-12 place-items-center rounded-2xl bg-ember-500/12 text-ember-600 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-y-1 group-hover:rotate-3 dark:text-ember-400">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </span>
+          <h3 class="mb-2 font-bold text-coal-900 dark:text-white">دیزاین سیستم</h3>
+          <p class="text-sm leading-7 text-coal-500 dark:text-coal-400">رنگ‌ها، فونت‌ها، کامپوننت‌ها — یه زبان مشترک برای کل تیم، نه هر کسی یه سبک جدا.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ======================= مراحل همکاری ======================= -->
+    <section id="process" class="mt-28 scroll-mt-28" aria-label="مراحل همکاری">
+      <div data-reveal class="mb-10">
+        <p class="mb-2 text-sm font-bold text-ember-600 dark:text-ember-400">چطور کار می‌کنم</p>
+        <h2 class="text-3xl font-extrabold tracking-tight text-coal-900 sm:text-4xl dark:text-white">مراحل همکاری</h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <article data-reveal class="bento spotlight p-6">
+          <p class="mb-4 text-5xl font-extrabold text-coal-200 transition-colors duration-500 dark:text-coal-800">۰۱</p>
+          <h3 class="mb-2 font-bold text-coal-900 dark:text-white">کشف و تحقیق</h3>
+          <p class="text-sm leading-7 text-coal-500 dark:text-coal-400">اول می‌شینیم حرف می‌زنیم: کاربر کیه، مشکل چیه، رقیب‌ها چیکار می‌کنن. بعد طراحی شروع می‌شه.</p>
+        </article>
+        <article data-reveal class="bento spotlight p-6">
+          <p class="mb-4 text-5xl font-extrabold text-coal-200 transition-colors duration-500 dark:text-coal-800">۰۲</p>
+          <h3 class="mb-2 font-bold text-coal-900 dark:text-white">طراحی و پروتوتایپ</h3>
+          <p class="text-sm leading-7 text-coal-500 dark:text-coal-400">وایرفریم، بعد طراحی، بعد پروتوتایپ. هر مرحله رو نشون می‌دم، نظرتون رو می‌گیرم، اصلاح می‌کنیم.</p>
+        </article>
+        <article data-reveal class="bento spotlight p-6">
+          <p class="mb-4 text-5xl font-extrabold text-ember-500/80">۰۳</p>
+          <h3 class="mb-2 font-bold text-coal-900 dark:text-white">توسعه و پولیش</h3>
+          <p class="text-sm leading-7 text-coal-500 dark:text-coal-400">کد می‌زنم، انیمیشن‌ها رو تنظیم می‌کنم، روی موبایل و مرورگرهای مختلف تست می‌کنم.</p>
+        </article>
+        <article data-reveal class="bento spotlight p-6">
+          <p class="mb-4 text-5xl font-extrabold text-coal-200 transition-colors duration-500 dark:text-coal-800">۰۴</p>
+          <h3 class="mb-2 font-bold text-coal-900 dark:text-white">لانچ و پشتیبانی</h3>
+          <p class="text-sm leading-7 text-coal-500 dark:text-coal-400">تحویل می‌دم، بعدش هم می‌مونم — اگه چیزی خراب شد یا خواستید چیزی عوض بشه، در دسترسم.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ======================= تجربه‌ها ======================= -->
+    <section id="experience" class="mt-28 scroll-mt-28" aria-label="تجربه‌های کاری">
+      <div data-reveal class="mb-10">
+        <p class="mb-2 text-sm font-bold text-ember-600 dark:text-ember-400">مسیر من</p>
+        <h2 class="text-3xl font-extrabold tracking-tight text-coal-900 sm:text-4xl dark:text-white">تجربه‌های کاری</h2>
+      </div>
+
+      <div class="bento p-2 sm:p-3" data-reveal>
+        <ol class="relative">
+          <!-- آیتم -->
+          <li class="group relative flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-coal-100/70 sm:flex-row sm:items-center sm:justify-between sm:gap-6 dark:hover:bg-white/[0.03]">
+            <div class="flex items-start gap-4">
+              <span class="mt-1 grid size-11 shrink-0 place-items-center rounded-2xl bg-ember-500/12 text-ember-600 dark:text-ember-400">
+                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </span>
+              <div>
+                <h3 class="font-bold text-coal-900 dark:text-white">طراح ارشد محصول — استودیو «رایان‌وب»</h3>
+                <p class="mt-1 text-sm leading-7 text-coal-500 dark:text-coal-400">دیزاین سیستم شرکت رو راه انداختم و داشبوردهای B2B طراحی کردم — بیش از ۲۰۰ هزار کاربر فعال روزانه.</p>
+              </div>
+            </div>
+            <span class="chip shrink-0 text-xs">۱۴۰۱ — اکنون</span>
+          </li>
+
+          <li class="group relative flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-coal-100/70 sm:flex-row sm:items-center sm:justify-between sm:gap-6 dark:hover:bg-white/[0.03]">
+            <div class="flex items-start gap-4">
+              <span class="mt-1 grid size-11 shrink-0 place-items-center rounded-2xl bg-coal-500/10 text-coal-500 dark:text-coal-400">
+                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>
+              </span>
+              <div>
+                <h3 class="font-bold text-coal-900 dark:text-white">توسعه‌دهنده‌ی فرانت‌اند — فروشگاه «آوا»</h3>
+                <p class="mt-1 text-sm leading-7 text-coal-500 dark:text-coal-400">ویترین فروشگاه رو با Next.js زدم و سرعت لود رو تا امتیاز ۹۸ Core Web Vitals بالا بردم.</p>
+              </div>
+            </div>
+            <span class="chip shrink-0 text-xs">۱۳۹۹ — ۱۴۰۱</span>
+          </li>
+
+          <li class="group relative flex flex-col gap-2 rounded-2xl p-5 transition-colors duration-300 hover:bg-coal-100/70 sm:flex-row sm:items-center sm:justify-between sm:gap-6 dark:hover:bg-white/[0.03]">
+            <div class="flex items-start gap-4">
+              <span class="mt-1 grid size-11 shrink-0 place-items-center rounded-2xl bg-coal-500/10 text-coal-500 dark:text-coal-400">
+                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+              </span>
+              <div>
+                <h3 class="font-bold text-coal-900 dark:text-white">طراح UI/UX فریلنس</h3>
+                <p class="mt-1 text-sm leading-7 text-coal-500 dark:text-coal-400">با استارتاپ‌های ایرانی و خارجی کار کردم — بیشتر تو فین‌تک، آموزش و سلامت.</p>
+              </div>
+            </div>
+            <span class="chip shrink-0 text-xs">۱۳۹۷ — ۱۳۹۹</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ======================= درباره من ======================= -->
+    <section id="about" class="mt-28 scroll-mt-28" aria-label="درباره من">
+      <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+
+        <article data-reveal class="bento spotlight lg:col-span-2">
+          <div class="flex h-full flex-col justify-center gap-5 p-8 sm:p-10">
+            <p class="text-sm font-bold text-ember-600 dark:text-ember-400">درباره من</p>
+            <h2 class="text-balance text-2xl font-extrabold leading-snug text-coal-900 sm:text-3xl dark:text-white">
+              وقتی یه چیز درست کار می‌کنه،<br />کسی تعریفش نمی‌کنه — فقط استفاده می‌کنه.
+            </h2>
+            <p class="max-w-xl text-base leading-9 text-coal-500 dark:text-coal-400">
+              هفت ساله بین طراحی و کد جابه‌جا می‌شم. دوست دارم روی چیزهای کوچک
+              وسواس داشته باشم: فاصله بین دکمه‌ها، سرعت انیمیشن، پیام خطا —
+              چیزایی که معمولاً کسی بهشون فکر نمی‌کنه، ولی وقتی درست باشن
+              همه‌چیز راحت‌تره.
+            </p>
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="chip text-xs">طراحی رابط کاربری</span>
+              <span class="chip text-xs">تجربه کاربری</span>
+              <span class="chip text-xs">دیزاین سیستم</span>
+              <span class="chip text-xs">موشن دیزاین</span>
+              <span class="chip text-xs">دسترس‌پذیری</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- کارت چرخشی آیکون -->
+        <article data-reveal class="bento spotlight">
+          <div class="relative flex h-full min-h-64 flex-col items-center justify-center gap-6 overflow-hidden p-8">
+            <div class="absolute inset-0 grid place-items-center" aria-hidden="true">
+              <div class="size-56 animate-spin-slow rounded-full border border-dashed border-coal-300/60 dark:border-white/10"></div>
+            </div>
+            <span class="relative grid size-20 animate-float place-items-center rounded-3xl bg-ember-500 text-coal-950 shadow-[0_16px_40px_-12px_rgb(245_135_11/0.7)]">
+              <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </span>
+            <p class="relative text-center text-sm font-medium leading-7 text-coal-500 dark:text-coal-400">
+              دوست دارم چیزایی بسازم که<br />هم خوشگل باشن، هم سریع.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ======================= نظرات مشتریان ======================= -->
+    <section id="testimonials" class="mt-28 scroll-mt-28" aria-label="نظرات مشتریان">
+      <div data-reveal class="mb-10">
+        <p class="mb-2 text-sm font-bold text-ember-600 dark:text-ember-400">نظر همکارا و مشتری‌ها</p>
+        <h2 class="text-3xl font-extrabold tracking-tight text-coal-900 sm:text-4xl dark:text-white">نظرات مشتریان</h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+
+        <figure data-reveal class="bento spotlight flex flex-col gap-5 p-7">
+          <svg class="size-8 text-ember-500/60" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 8c-3 1-5 3.5-5 7v1h5v-6H7.5C8 9 9 8.5 10 8.2V8Zm9 0c-3 1-5 3.5-5 7v1h5v-6h-2.5c.5-1 1.5-1.5 2.5-1.8V8Z"/></svg>
+          <blockquote class="flex-1 text-sm leading-8 text-coal-600 dark:text-coal-300">
+            حسن فقط UI نمی‌کشه — اول می‌پرسه چرا. فلو پرداخت ما بعد از بازطراحیش ۳۲٪ بهتر شد.
+            دیزاین سیستمی که ساخت هنوز داریم باهاش کار می‌کنیم.
+          </blockquote>
+          <figcaption class="flex items-center gap-3 border-t border-coal-200/70 pt-4 dark:border-white/[0.07]">
+            <span class="grid size-11 place-items-center rounded-full bg-ember-500/15 text-sm font-bold text-ember-600 dark:text-ember-400">س م</span>
+            <div>
+              <p class="text-sm font-bold text-coal-900 dark:text-white">سارا محمدی</p>
+              <p class="text-xs text-coal-400 dark:text-coal-500">مدیر محصول، فروشگاه آوا</p>
+            </div>
+          </figcaption>
+        </figure>
+
+        <figure data-reveal class="bento spotlight flex flex-col gap-5 p-7">
+          <svg class="size-8 text-ember-500/60" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 8c-3 1-5 3.5-5 7v1h5v-6H7.5C8 9 9 8.5 10 8.2V8Zm9 0c-3 1-5 3.5-5 7v1h5v-6h-2.5c.5-1 1.5-1.5 2.5-1.8V8Z"/></svg>
+          <blockquote class="flex-1 text-sm leading-8 text-coal-600 dark:text-coal-300">
+            روی جزئیات خیلی حساسه. انیمیشن‌هایی که زد انقدر روان بود که تو نظرسنجی
+            کاربرا نوشتن «استفاده از اپ لذت‌بخشه» — بدون اینکه بگن چرا.
+          </blockquote>
+          <figcaption class="flex items-center gap-3 border-t border-coal-200/70 pt-4 dark:border-white/[0.07]">
+            <span class="grid size-11 place-items-center rounded-full bg-ember-500/15 text-sm font-bold text-ember-600 dark:text-ember-400">ا ر</span>
+            <div>
+              <p class="text-sm font-bold text-coal-900 dark:text-white">امیر رضایی</p>
+              <p class="text-xs text-coal-400 dark:text-coal-500">هم‌بنیان‌گذار، اپلیکیشن پارس</p>
+            </div>
+          </figcaption>
+        </figure>
+
+        <figure data-reveal class="bento spotlight flex flex-col gap-5 p-7">
+          <svg class="size-8 text-ember-500/60" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 8c-3 1-5 3.5-5 7v1h5v-6H7.5C8 9 9 8.5 10 8.2V8Zm9 0c-3 1-5 3.5-5 7v1h5v-6h-2.5c.5-1 1.5-1.5 2.5-1.8V8Z"/></svg>
+          <blockquote class="flex-1 text-sm leading-8 text-coal-600 dark:text-coal-300">
+            هم طراحی می‌کنه هم کد می‌زنه — این ترکیب تو پروژه‌های ما خیلی کمک کرد.
+            سر وقت تحویل داد، حرفش روشن بود، و نتیجه از چیزی که انتظار داشتیم بهتر شد.
+          </blockquote>
+          <figcaption class="flex items-center gap-3 border-t border-coal-200/70 pt-4 dark:border-white/[0.07]">
+            <span class="grid size-11 place-items-center rounded-full bg-ember-500/15 text-sm font-bold text-ember-600 dark:text-ember-400">ن ک</span>
+            <div>
+              <p class="text-sm font-bold text-coal-900 dark:text-white">نگار کریمی</p>
+              <p class="text-xs text-coal-400 dark:text-coal-500">مدیر فنی، استودیو رایان‌وب</p>
+            </div>
+          </figcaption>
+        </figure>
+
+      </div>
+    </section>
+
+    <!-- ======================= سوالات متداول ======================= -->
+    <section id="faq" class="mt-28 scroll-mt-28" aria-label="سوالات متداول">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+
+        <div data-reveal>
+          <p class="mb-2 text-sm font-bold text-ember-600 dark:text-ember-400">قبل از شروع</p>
+          <h2 class="text-3xl font-extrabold tracking-tight text-coal-900 sm:text-4xl dark:text-white">سوالات متداول</h2>
+          <p class="mt-4 text-sm leading-8 text-coal-500 dark:text-coal-400">
+            جواب سوالت رو پیدا نکردی؟
+            <a href="mailto:hi@hassan.dev" class="link-underline font-semibold text-ember-600 dark:text-ember-400">یه ایمیل بزن</a>، جواب می‌دم.
+          </p>
+        </div>
+
+        <div data-reveal class="bento p-2 sm:p-3 lg:col-span-2">
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span>فرآیند شروع همکاری چطوریه؟</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+            <div class="faq-panel">
+              <p class="faq-content">اول یه تماس یا جلسه آنلاین رایگان داریم — پروژه رو می‌شنوم، سوال می‌پرسم، بعد زمان و هزینه رو می‌گم. قرارداد که بسته شد، کار شروع می‌شه.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span>یک پروژه معمولی چقدر طول می‌کشه؟</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+            <div class="faq-panel">
+              <p class="faq-content">بستگی داره. لندینگ‌پیج معمولاً ۲–۳ هفته، طراحی کامل یه محصول ۱–۲ ماه، دیزاین سیستم بسته به بزرگی تیم ۱.۵ تا ۳ ماه.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span>فقط طراحی می‌کنی یا پیاده‌سازی هم انجام می‌دی؟</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+            <div class="faq-panel">
+              <p class="faq-content">هر دو. می‌تونم فقط طراحی بدم و فایل Figma رو تحویل بدم، یا از اول تا آخر خودم بزنم — هر کدوم براتون راحت‌تره.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span>هزینه‌ی همکاری چطور محاسبه می‌شه؟</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+            <div class="faq-panel">
+              <p class="faq-content">یا قیمت ثابت برای کل پروژه، یا ساعتی — بسته به کار. بعد از جلسه اول یه پیشنهاد شفاف می‌فرستم، بدون هزینه پنهان.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span>بعد از تحویل پروژه هم پشتیبانی داری؟</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+            <div class="faq-panel">
+              <p class="faq-content">بله — یک ماه بعد از تحویل رایگان پشتیبانی دارید. بعدش اگه لازم بود می‌تونیم ماهانه قرارداد ببندیم.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================= تماس ======================= -->
+    <section id="contact" class="mt-28 scroll-mt-28" aria-label="تماس با من">
+      <div data-reveal class="bento edge-glow relative overflow-hidden">
+        <div class="absolute -left-24 -top-24 size-72 rounded-full bg-ember-500/15 blur-3xl" aria-hidden="true"></div>
+        <div class="relative flex flex-col items-center gap-7 px-6 py-16 text-center sm:py-20">
+          <span class="inline-flex items-center gap-2 rounded-full border border-ember-500/25 bg-ember-500/10 px-4 py-1.5 text-xs font-semibold text-ember-600 dark:text-ember-300">
+            <span class="size-2 rounded-full bg-ember-500 animate-pulse-dot"></span>
+            معمولاً تا ۲۴ ساعت جواب می‌دم
+          </span>
+          <h2 class="text-balance max-w-2xl text-3xl font-extrabold leading-snug tracking-tight text-coal-900 sm:text-5xl dark:text-white">
+            پروژه‌ای تو ذهنته؟<br />بگو <span class="text-gradient">باهم دربیاریمش.</span>
+          </h2>
+          <p class="max-w-md text-base leading-8 text-coal-500 dark:text-coal-400">
+            برای همکاری، مشاوره، یا فقط یه گپ درباره طراحی — پیام بذار، حتماً می‌خونم.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            <a href="mailto:hi@hassan.dev" class="btn-primary magnetic !px-7 !py-3.5 text-base">
+              <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              ارسال ایمیل
+            </a>
+            <button id="copy-email" type="button" class="btn-ghost magnetic !px-6 !py-3.5 text-base" data-email="hi@hassan.dev">
+              <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span id="copy-email-label">کپی ایمیل</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================= فوتر ======================= -->
+  <footer class="mx-auto mt-20 max-w-6xl px-5 pb-10 sm:px-8">
+    <div class="flex flex-col items-center justify-between gap-4 border-t border-coal-200 pt-8 text-sm text-coal-400 sm:flex-row dark:border-white/[0.07] dark:text-coal-500">
+      <p>© ۱۴۰۵ حسن خسروجردی — با Tailwind و یه مقدار قهوه ساخته شده.</p>
+      <button id="back-to-top" type="button" class="group inline-flex cursor-pointer items-center gap-2 font-medium transition-colors hover:text-ember-500">
+        بازگشت به بالا
+        <span class="grid size-8 place-items-center rounded-full border border-coal-200 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-ember-500/40 dark:border-white/10">
+          <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m0 0-6 6m6-6 6 6"/></svg>
+        </span>
+      </button>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
