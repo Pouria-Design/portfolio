@@ -35,9 +35,13 @@
   }
 
   toggle.addEventListener("click", function () {
-    var isDark = root.classList.toggle("dark");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-    syncThemeIcon();
+    root.classList.add("theme-transition");
+    requestAnimationFrame(function () {
+      var isDark = root.classList.toggle("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      syncThemeIcon();
+      window.setTimeout(function () { root.classList.remove("theme-transition"); }, 380);
+    });
   });
   syncThemeIcon();
 
@@ -164,6 +168,7 @@
   var FA_DIGITS = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
 
   function toFa(num) {
+    if (document.documentElement.lang === "en") return String(num);
     return String(num).replace(/\d/g, function (d) { return FA_DIGITS[+d]; });
   }
 
@@ -230,11 +235,11 @@
     var email = copyBtn.getAttribute("data-email");
 
     function done() {
-      copyLabel.textContent = "کپی شد!";
+      copyLabel.textContent = document.documentElement.lang === "en" ? "Copied!" : "کپی شد!";
       copyBtn.classList.add("!border-ember-500/50", "!text-ember-500");
       clearTimeout(resetTimer);
       resetTimer = setTimeout(function () {
-        copyLabel.textContent = "کپی ایمیل";
+        copyLabel.textContent = document.documentElement.lang === "en" ? "Copy Email" : "کپی ایمیل";
         copyBtn.classList.remove("!border-ember-500/50", "!text-ember-500");
       }, 2000);
     }

@@ -507,3 +507,13 @@
     background 200ms ease;
   box-shadow: 0 8px 24px -8px rgb(245 135 11 / 0.55);
 }
+
+
+/* Smooth fade for light/dark theme changes */
+html.theme-transition body, html.theme-transition body *, html.theme-transition header, html.theme-transition footer {
+  transition-property: background-color, color, border-color, box-shadow, fill, stroke !important;
+  transition-duration: 360ms !important;
+  transition-timing-function: ease !important;
+}
+html[lang="en"] body { direction: ltr; text-align: left; }
+html[lang="en"] #scroll-progress { transform-origin: left; }
